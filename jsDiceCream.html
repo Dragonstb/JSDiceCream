@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSDiceCream</title>
+    <script src="heaps.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', afterLoadingPage);
+
+        function afterLoadingPage() {
+            let heap = makeHeap(6);
+            
+            const pool = document.querySelector('#pool');
+            const wait = pool.querySelector('#wait');
+            pool.removeChild(wait);
+            pool.appendChild(heap.v);
+        };
+    </script>
+</head>
+<body>
+    <h1>JSDiceCream</h1>
+
+    <div>
+        <!-- TODO: form -->
+    </div>
+    <h3>Overview</h3>
+    <div>
+        <button aria-describedby="poolDescriptor">roll all dice</button>
+        <div id="poolDescriptor">Pool is: <span>1d6</span></div>
+        <div>Total: 0</div>
+    </div>
+
+    <div id="pool">
+        <div id="wait">initializing</div>
+        <!-- <div>
+            <h3>1d6</h3>
+            <div class="total">Total: 0</div>
+            <div class="rolls">Rolls:</div>
+            <div>
+                <button x-role="add">add 1d6</button>
+                <button disabled="true" x-role="remove">remove 1d6</button>
+                <button x-role="clear">remove all d6</button>
+            </div>
+        </div> -->
+    </div>
+</body>
+</html>
