@@ -24,7 +24,7 @@ function makeHeap(facets, count=1) {
         main.appendChild(title);
 
         const rollBtn = document.createElement('button');
-        rollBtn.setAttribute('x-role', 'roll');
+        rollBtn.setAttribute(XROLE, ROLL);
         main.appendChild(rollBtn);
 
         const total = document.createElement('div');
@@ -37,13 +37,13 @@ function makeHeap(facets, count=1) {
 
         const buttons = document.createElement('div');
         const addBtn = document.createElement('button');
-        addBtn.setAttribute('x-role', 'add');
+        addBtn.setAttribute(XROLE, ADD);
         buttons.appendChild(addBtn);
         const remBtn = document.createElement('button');
         buttons.appendChild(remBtn);
-        remBtn.setAttribute('x-role', 'remove');
+        remBtn.setAttribute(XROLE, REMOVE);
         const clearBtn = document.createElement('button');
-        clearBtn.setAttribute('x-role', 'clear');
+        clearBtn.setAttribute(XROLE, CLEAR);
         buttons.appendChild(clearBtn);
         main.appendChild(buttons);
 
@@ -113,16 +113,16 @@ function makeHeap(facets, count=1) {
             updateButtons: function() {
                 let elem;
 
-                elem = this.view.querySelector('[x-role="roll"]');
+                elem = this.view.querySelector('['+XROLE+'="'+ROLL+'"]');
                 elem.innerText = 'roll all d'+this.model.facets;
 
-                elem = this.view.querySelector('[x-role="add"]');
+                elem = this.view.querySelector('['+XROLE+'="'+ADD+'"]');
                 elem.innerText = 'add 1d'+this.model.facets;
                 
-                elem = this.view.querySelector('[x-role="remove"]');
+                elem = this.view.querySelector('['+XROLE+'="'+REMOVE+'"]');
                 elem.innerText = 'remove 1d'+this.model.facets;
                 
-                elem = this.view.querySelector('[x-role="clear"]');
+                elem = this.view.querySelector('['+XROLE+'="'+CLEAR+'"]');
                 elem.innerText = 'remove all d'+this.model.facets;
             },
 
@@ -137,7 +137,7 @@ function makeHeap(facets, count=1) {
             },
 
             updateRemoveDieDisabled: function() {
-                const elem = this.view.querySelector('[x-role="remove"]');
+                const elem = this.view.querySelector('['+XROLE+'="'+REMOVE+'"]');
                 if( this.model.count < 2 ) {
                     elem.setAttribute('disabled', true);
                 }
@@ -153,13 +153,13 @@ function makeHeap(facets, count=1) {
                 this.updateResults(this.view, this.model);
 
                 let elem;
-                elem = this.view.querySelector('[x-role="roll"]');
+                elem = this.view.querySelector('['+XROLE+'="'+ROLL+'"]');
                 elem.addEventListener('click', () => this.rollHeap());
-                elem = this.view.querySelector('[x-role="add"]');
+                elem = this.view.querySelector('['+XROLE+'="'+ADD+'"]');
                 elem.addEventListener('click', () => this.addDice(1));
-                elem = this.view.querySelector('[x-role="remove"]');
+                elem = this.view.querySelector('['+XROLE+'="'+REMOVE+'"]');
                 elem.addEventListener('click', () => this.addDice(-1));
-                elem = this.view.querySelector('[x-role="clear"]');
+                elem = this.view.querySelector('['+XROLE+'="'+CLEAR+'"]');
                 elem.addEventListener('click', () => this.removeHeap());
             },
 
