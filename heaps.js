@@ -71,11 +71,17 @@ function makeHeap(facets, count=1) {
                     this.model.count = Math.max(this.model.count+byNumber, 1);
                     this.updateDescriptor();
                     this.updateRemoveDieDisabled();
+                    const event = new Event(HEAP_CHANGED_EVENT, {bubbles: true});
+                    this.view.dispatchEvent(event);
                 }
             },
 
             removeHeap: function() {
-                
+                const event = new CustomEvent(REMOVE_HEAP_EVENT, {
+                    bubbles: true,
+                    detail: {facets: this.model.facets}
+                });
+                this.view.dispatchEvent(event);
             },
 
             rollHeap: function() {
@@ -99,6 +105,15 @@ function makeHeap(facets, count=1) {
 
                 this.updateResults();
                 return this.model.total;
+            },
+
+            rollSingleHeap: function() {
+                this.rollHeap();
+                const event = new CustomEvent(SINGLE_HEAP_ROLLED_EVENT, {
+                    bubbles: true,
+                    detail: {total: this.model.total}
+                });
+                this.view.dispatchEvent(event);
             },
 
             nextRandom: function() {
@@ -154,7 +169,7 @@ function makeHeap(facets, count=1) {
 
                 let elem;
                 elem = this.view.querySelector('['+XROLE+'="'+ROLL+'"]');
-                elem.addEventListener('click', () => this.rollHeap());
+                elem.addEventListener('click', () => this.rollSingleHeap());
                 elem = this.view.querySelector('['+XROLE+'="'+ADD+'"]');
                 elem.addEventListener('click', () => this.addDice(1));
                 elem = this.view.querySelector('['+XROLE+'="'+REMOVE+'"]');

@@ -18,6 +18,9 @@ const Pool = {
         elem = document.querySelector('#addDiceButton');
         elem.addEventListener('click', () => this.addDice() );
         
+        this.poolElem.addEventListener(HEAP_CHANGED_EVENT, () => this.updatePoolDescriptor() );
+        this.poolElem.addEventListener(REMOVE_HEAP_EVENT, (event) => this.removeHeap(event.detail.facets) );
+        this.poolElem.addEventListener(SINGLE_HEAP_ROLLED_EVENT, (event) => this.updatePoolTotal(event.detail.total) );
     },
 
     addDice: function() {
@@ -60,8 +63,7 @@ const Pool = {
             this.insertHeapElement(heap);
         }
 
-        const pd = this.assemblePoolDescriptor();
-        this.poolDescriptorElem.innerText = 'Pool is: '+pd;
+        this.updatePoolDescriptor();
     },
 
     insertHeapElement: function(heap) {
@@ -79,12 +81,33 @@ const Pool = {
         }
     },
 
-    assemblePoolDescriptor: function() {
+    removeHeap: function(facets) {
+        let heap = undefined;
+        if( this.heaps.length > 1) {
+            for (const entry of this.heaps) {
+                if(entry.getNumFacets() === facets) {
+                    heap = entry;
+                    break;
+                }
+            }
+        }
+
+        if(heap) {
+            const index = this.heaps.indexOf(heap);
+            this.heaps.splice(index, 1);
+            this.poolElem.removeChild(heap.getViewElement());
+        }
+
+        this.updatePoolDescriptor();
+    },
+
+    updatePoolDescriptor: function() {
         let heapDescriptors = [];
         for (const heap of this.heaps) {
             heapDescriptors.push( heap.getNumDice()+'d'+heap.getNumFacets() );
         }
-        return heapDescriptors.join('+');
+        const pd = heapDescriptors.join('+');
+        this.poolDescriptorElem.innerText = 'Pool is: '+pd;
     },
 
     rollPool: function() {
