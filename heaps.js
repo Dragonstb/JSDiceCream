@@ -7,7 +7,7 @@ function makeHeap(facets, count=1) {
         Example:
 
         <div>
-            <h3>1d6</h3>
+            <h3 aria-live="polite">1d6</h3>
             <button x-role="roll">roll 1d6</button>
             <div>Total: 0</div>
             <div>Rolls:</div>
@@ -21,6 +21,7 @@ function makeHeap(facets, count=1) {
         const main = document.createElement('div');
         
         const title = document.createElement('h3');
+        title.setAttribute('aria-live', 'polite');
         main.appendChild(title);
 
         const rollBtn = document.createElement('button');

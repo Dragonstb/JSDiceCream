@@ -40,21 +40,11 @@
     <div>
         <button aria-describedby="poolDescriptor" id="rollPool">roll all dice</button>
         <div id="poolDescriptor">Pool is:</div>
-        <div id="poolTotal">Total: 0</div>
+        <div id="poolTotal" aria-live="polite">Total: 0</div>
     </div>
 
     <div id="pool">
         <div id="wait">initializing</div>
-        <!-- <div>
-            <h3>1d6</h3>
-            <div class="total">Total: 0</div>
-            <div class="rolls">Rolls:</div>
-            <div>
-                <button x-role="add">add 1d6</button>
-                <button disabled="true" x-role="remove">remove 1d6</button>
-                <button x-role="clear">remove all d6</button>
-            </div>
-        </div> -->
     </div>
 </body>
 </html>
