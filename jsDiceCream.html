@@ -7,16 +7,17 @@
     <title>JSDiceCream</title>
     <link rel="icon" type="image/x-icon" href="jsdicecream.png">
     <script src="heaps.js" defer></script>
+    <script src="pool.js" defer></script>
     <script>
         document.addEventListener('DOMContentLoaded', afterLoadingPage);
 
         function afterLoadingPage() {
-            let heap = makeHeap(6);
-            
             const pool = document.querySelector('#pool');
             const wait = pool.querySelector('#wait');
             pool.removeChild(wait);
-            pool.appendChild(heap.v);
+
+            Pool.initialize();
+            Pool.addHeap(6);
         };
     </script>
 </head>
@@ -28,9 +29,9 @@
     </div>
     <h3>Overview</h3>
     <div>
-        <button aria-describedby="poolDescriptor">roll all dice</button>
-        <div id="poolDescriptor">Pool is: <span>1d6</span></div>
-        <div>Total: 0</div>
+        <button aria-describedby="poolDescriptor" id="rollPool">roll all dice</button>
+        <div id="poolDescriptor">Pool is:</div>
+        <div id="poolTotal">Total: 0</div>
     </div>
 
     <div id="pool">

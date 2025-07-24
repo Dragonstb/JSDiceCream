@@ -1,6 +1,6 @@
 "use strict";
 
-function makeHeap(facets) {
+function makeHeap(facets, count=1) {
 
     function makeView() {
         /*
@@ -50,10 +50,10 @@ function makeHeap(facets) {
         return main;
     }
 
-    function makeModel(numfacets) {
+    function makeModel(numfacets, numdice=1) {
         let model = {
             facets: numfacets,
-            count: 1,
+            count: numdice,
             total: 0,
             rolls: ""
         }
@@ -98,6 +98,7 @@ function makeHeap(facets) {
                 this.model.rolls = rolls.join(', ');
 
                 this.updateResults();
+                return this.model.total;
             },
 
             nextRandom: function() {
@@ -132,7 +133,7 @@ function makeHeap(facets) {
                 elem.innerText = 'Total: '+this.model.total;
 
                 elem = this.view.querySelector('.rolls');
-                elem.innerText = 'Total: '+this.model.rolls;
+                elem.innerText = 'Rolls: '+this.model.rolls;
             },
 
             updateRemoveDieDisabled: function() {
@@ -172,9 +173,29 @@ function makeHeap(facets) {
     }
 
     let heap = {
-        m: makeModel(facets),
+        m: makeModel(facets, count),
         v: makeView(),
-        c: makeController()
+        c: makeController(),
+
+        getNumFacets: function() {
+            return this.m.facets;
+        },
+
+        getNumDice: function() {
+            return this.m.count;
+        },
+
+        addDice: function(count) {
+            c.addDice(count);
+        },
+
+        roll: function() {
+            return this.c.rollHeap();
+        },
+
+        getViewElement: function() {
+            return this.v;
+        }
     }
     heap.c.initializeController(heap.v, heap.m);
     heap.c.initializeView();    
