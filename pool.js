@@ -6,12 +6,41 @@ const Pool = {
     poolDescriptorElem: document.querySelector('#poolDescriptor'),
     poolElem: document.querySelector('#pool'),
     totalElem: document.querySelector('#poolTotal'),
+    numDiceElem: document.querySelector('#numDiceInput'),
+    numFacetsElem: document.querySelector('#numFacetsInput'),
 
     initialize: function() {
         let elem;
 
         elem = document.querySelector('#rollPool');
         elem.addEventListener('click', () => this.rollPool() );
+        
+        elem = document.querySelector('#addDiceButton');
+        elem.addEventListener('click', () => this.addDice() );
+        
+    },
+
+    addDice: function() {
+        const numDiceOk = this.checkInput(this.numDiceElem);
+        const numFacetsOk = this.checkInput(this.numFacetsElem);
+
+        if( numDiceOk && numFacetsOk ) {
+            let facets = parseInt(this.numFacetsElem.value);
+            let count = parseInt(this.numDiceElem.value);
+            this.addHeap(facets, count);
+        }
+        else {
+            if(!numDiceOk) {
+                this.numDiceElem.value = "";
+            }
+            if(!numFacetsOk) {
+                this.numFacetsElem.value = "";
+            }
+        }
+    },
+
+    checkInput: function(input) {
+        return input.value && parseInt(input.value) > 0;
     },
 
     addHeap: function(facets, count=1) {

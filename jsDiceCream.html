@@ -25,7 +25,15 @@
     <h1>JSDiceCream</h1>
 
     <div>
-        <!-- TODO: form -->
+        <form>
+            <label for="numDiceInput">
+                <input type="number" id="numDiceInput" min="1" placeholder="insert positive integer" required>
+            </label>
+            <label for="numFacetsInput">
+                <input type="number" id="numFacetsInput" min="1" placeholder="insert positive integer" required>
+            </label>
+            <button type="button" id="addDiceButton">add dice to pool</button>
+        </form>
     </div>
     <h3>Overview</h3>
     <div>

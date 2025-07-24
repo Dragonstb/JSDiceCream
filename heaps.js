@@ -186,7 +186,7 @@ function makeHeap(facets, count=1) {
         },
 
         addDice: function(count) {
-            c.addDice(count);
+            this.c.addDice(count);
         },
 
         roll: function() {
