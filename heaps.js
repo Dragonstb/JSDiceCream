@@ -8,12 +8,13 @@ function makeHeap(facets) {
 
         <div>
             <h3>1d6</h3>
+            <button x-role="roll">roll 1d6</button>
             <div>Total: 0</div>
             <div>Rolls:</div>
             <div>
-                <button>add 1d6</button>
-                <button disabled="true">remove 1d6</button>
-                <button>remove all d6</button>
+                <button x-role="add">add 1d6</button>
+                <button disabled="true" x-role="remove">remove 1d6</button>
+                <button x-role="clear">remove all d6</button>
             </div>
         </div>
         */
@@ -21,6 +22,10 @@ function makeHeap(facets) {
         
         const title = document.createElement('h3');
         main.appendChild(title);
+
+        const rollBtn = document.createElement('button');
+        rollBtn.setAttribute('x-role', 'roll');
+        main.appendChild(rollBtn);
 
         const total = document.createElement('div');
         total.classList.add('total');
@@ -58,45 +63,108 @@ function makeHeap(facets) {
 
     function makeController() {
         let controller = {
+            model: undefined,
+            view: undefined,
+
+            addDice: function(byNumber) {
+                if(byNumber !== 0) {
+                    this.model.count = Math.max(this.model.count+byNumber, 1);
+                    this.updateDescriptor();
+                    this.updateRemoveDieDisabled();
+                }
+            },
+
+            removeHeap: function() {
+                
+            },
+
+            rollHeap: function() {
+                let rolls = [];
+                const skip = Date.now() % 16;
+                for (let counter = 0; counter < skip; counter++) {
+                    Math.random();
+                }
+
+                const numRolls = this.model.count;
+                const numFacets = this.model.facets-1;
+                let total = 0;
+                for (let counter = 0; counter < numRolls; counter++) {
+                    let roll = 1 + Math.floor( numFacets*Math.random() );
+                    total += roll;
+                    rolls.push(roll);
+                }
+
+                this.model.total = total;
+                this.model.rolls = rolls.join(', ');
+
+                this.updateResults();
+            },
+
+            nextRandom: function() {
+                return Math.random();
+            },
             
-            updateDescriptor: function(view, model) {
-                const elem = view.querySelector('h3')
-                elem.innerText = model.count + 'd' + model.facets;
+            updateDescriptor: function() {
+                const elem = this.view.querySelector('h3')
+                elem.innerText = this.model.count + 'd' + this.model.facets;
             },
 
-            updateButtons: function(view, model) {
+            updateButtons: function() {
                 let elem;
 
-                elem = view.querySelector('[x-role="add"]');
-                elem.innerText = 'add 1d'+model.facets;
+                elem = this.view.querySelector('[x-role="roll"]');
+                elem.innerText = 'roll all d'+this.model.facets;
+
+                elem = this.view.querySelector('[x-role="add"]');
+                elem.innerText = 'add 1d'+this.model.facets;
                 
-                elem = view.querySelector('[x-role="remove"]');
-                elem.innerText = 'remove 1d'+model.facets;
+                elem = this.view.querySelector('[x-role="remove"]');
+                elem.innerText = 'remove 1d'+this.model.facets;
                 
-                elem = view.querySelector('[x-role="clear"]');
-                elem.innerText = 'remove all d'+model.facets;
+                elem = this.view.querySelector('[x-role="clear"]');
+                elem.innerText = 'remove all d'+this.model.facets;
             },
 
-            updateResults: function(view, model) {
+            updateResults: function() {
                 let elem;
 
-                elem = view.querySelector('.total');
-                elem.innerText = 'Total: '+model.total;
+                elem = this.view.querySelector('.total');
+                elem.innerText = 'Total: '+this.model.total;
 
-                elem = view.querySelector('.rolls');
-                elem.innerText = 'Total: '+model.rolls;
+                elem = this.view.querySelector('.rolls');
+                elem.innerText = 'Total: '+this.model.rolls;
             },
 
-            updateRemoveDisabled: function(view, model) {
-                const elem = view.querySelector('[x-role="remove"]');
-                elem.setAttribute('disabled', model.count < 2);
+            updateRemoveDieDisabled: function() {
+                const elem = this.view.querySelector('[x-role="remove"]');
+                if( this.model.count < 2 ) {
+                    elem.setAttribute('disabled', true);
+                }
+                else {
+                    elem.removeAttribute('disabled');
+                }
             },
 
-            initializeView: function(view, model) {
-                this.updateDescriptor(view, model);
-                this.updateButtons(view, model);
-                this.updateRemoveDisabled(view, model);
-                this.updateResults(view, model);
+            initializeView: function() {
+                this.updateDescriptor(this.view, this.model);
+                this.updateButtons(this.view, this.model);
+                this.updateRemoveDieDisabled(this.view, this.model);
+                this.updateResults(this.view, this.model);
+
+                let elem;
+                elem = this.view.querySelector('[x-role="roll"]');
+                elem.addEventListener('click', () => this.rollHeap());
+                elem = this.view.querySelector('[x-role="add"]');
+                elem.addEventListener('click', () => this.addDice(1));
+                elem = this.view.querySelector('[x-role="remove"]');
+                elem.addEventListener('click', () => this.addDice(-1));
+                elem = this.view.querySelector('[x-role="clear"]');
+                elem.addEventListener('click', () => this.removeHeap());
+            },
+
+            initializeController: function(v, m) {
+                this.view = v;
+                this.model = m;
             }
         }
 
@@ -108,7 +176,8 @@ function makeHeap(facets) {
         v: makeView(),
         c: makeController()
     }
-    heap.c.initializeView(heap.v, heap.m);
+    heap.c.initializeController(heap.v, heap.m);
+    heap.c.initializeView();    
 
     return heap;
 }
