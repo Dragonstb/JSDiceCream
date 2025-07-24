@@ -93,7 +93,7 @@ function makeHeap(facets, count=1) {
                 }
 
                 const numRolls = this.model.count;
-                const numFacets = this.model.facets-1;
+                const numFacets = this.model.facets;
                 let total = 0;
                 for (let counter = 0; counter < numRolls; counter++) {
                     let roll = 1 + Math.floor( numFacets*Math.random() );
